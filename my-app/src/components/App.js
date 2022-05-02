@@ -3,8 +3,8 @@ import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
 
-import Api from "../components/Utils/Api"
-import { optionsApi } from "../components/Utils/optionsApi"
+import Api from "../Utils/Api"
+import { optionsApi } from "../Utils/optionsApi"
 import ImagePopup from './ImagePopup'
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
@@ -38,6 +38,7 @@ function App() {
     Promise.all([api.getUserInfo(), api.getInitialCards()])
       .then(res => {
         setCurrentUser(res[0])
+        console.log(setCurrentUser)
         setCards(res[1])
       })
       .catch(err => console.log("Не удалось загрузить страницу:", err))

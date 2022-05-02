@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
-import { optionsApi } from "../components/Utils/optionsApi"
-import Api from "../components/Utils/Api"
+import { optionsApi } from "../Utils/optionsApi"
+import Api from "../Utils/Api"
 import Card from "./Card"
 
 const api = new Api(optionsApi)
