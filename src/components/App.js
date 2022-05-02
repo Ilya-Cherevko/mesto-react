@@ -15,7 +15,7 @@ import ConfirmDeletePopup from './ConfirmDeletePopup';
 const api = new Api(optionsApi)
 
 function App() {
-
+  
   // Состояние попапов
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false)
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false)
@@ -38,7 +38,6 @@ function App() {
     Promise.all([api.getUserInfo(), api.getInitialCards()])
       .then(res => {
         setCurrentUser(res[0])
-        console.log(res)
         setCards(res[1])
       })
       .catch(err => console.log("Не удалось загрузить страницу:", err))
