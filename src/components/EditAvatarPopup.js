@@ -3,7 +3,7 @@ import PopupWithForm from "./PopupWithForm"
 import Popup from "./Popup"
 
 function EditAvatarPopup(props) {
-    const { isOpen, onClose, onUpdateAvatar } = props
+    const { loader, isOpen, onClose, onUpdateAvatar } = props
 
     const avatarLink = useRef()
 
@@ -26,12 +26,19 @@ function EditAvatarPopup(props) {
             <PopupWithForm
                 name="avatar"
                 title="Обновить аватар"
-                buttonText={"Сохранить"}
+                buttonText={loader ? "Сохранение..." : "Сохранить"}
                 onClose={onClose}
                 onSubmit={handleSubmit}
             >
-                <label className="popup__form-label">
-                    <input ref={avatarLink} className="popup__input popup__input_value_link" id="link-avatar" type="url" name="avatar" placeholder="Ссылка на аватар" required/>
+                <label className="popup__form-field">
+                    <input 
+                        ref={avatarLink} 
+                        className="popup__input popup__input_value_link" 
+                        id="link-avatar" 
+                        type="url" 
+                        name="avatar" 
+                        placeholder="Ссылка на аватар" 
+                        required/>
                     <span className="popup__input-error link-avatar-error"></span>
                 </label>
             </PopupWithForm>

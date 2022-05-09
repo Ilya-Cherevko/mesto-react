@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
-
 import Api from "../Utils/Api"
 import { optionsApi } from "../Utils/optionsApi"
 import ImagePopup from './ImagePopup'
@@ -10,12 +9,11 @@ import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import ConfirmDeletePopup from './ConfirmDeletePopup';
-
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 const api = new Api(optionsApi)
 
 function App() {
-  
   // Состояние попапов
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false)
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false)
@@ -79,23 +77,29 @@ function App() {
 
   // Данные пользователя
   function handleUpdateUser(data) {
+    setIsLoadingButton(true)
+
     api.editUserInfo(data)
       .then(res => {
         setCurrentUser(res)
         closeAllPopups()
       })
       .catch(err => console.log("Не удалось изменить данные профиля:", err))
-  }
+      .finally(() => setIsLoadingButton(false))
+    }
 
   // Аватар пользователя
   function handleUpdateAvatar(data) {
+    setIsLoadingButton(true)
+
     api.editUserAvatar(data)
       .then(res => {
         setCurrentUser(res)
         closeAllPopups()
       })
       .catch(err => console.log("Не удалось сменить аватар:", err))
-  }
+      .finally(() => setIsLoadingButton(false))
+    }
 
   // Лайк карточки
   function handleCardLike(card) {
@@ -110,41 +114,49 @@ function App() {
 
   // Удаление карточки
   function handleCardDelete() {
+    setIsLoadingButton(true)
+    
     api.deleteCard(cardId)
       .then(() => {
         setCards(cards.filter(c => c._id !== cardId))
         closeAllPopups()
       })
       .catch(err => console.log("Не удалось удалить карточку:", err))
-  }
+      .finally(() => setIsLoadingButton(false))
+    }
 
   // Добавление карточки
   function handleAddPlaceSubmit(data) {
+    setIsLoadingButton(true)
+
     api.addCard(data)
       .then(newCard => {
         setCards([newCard, ...cards]);
         closeAllPopups()
       })
       .catch(err => console.log("Не удалось добавить карточку:", err))
-  }
+      .finally(() => setIsLoadingButton(false))
+    }
   
   return (
     <div className="page">
-      <div className="container">
-        <Header/>
-        <Main
-          onEditProfile={handleEditProfileClick}
-          onAddPlace={handleAddPlaceClick}
-          onEditAvatar={handleEditAvatarClick}
-          onCardClick={handleCardClick}
-          cards={cards}
-          onCardLike={handleCardLike}
-          onCardDelete={handleComfirmDeleteClick}          
-        />
-        <Footer/>
-      </div> 
-       {/* Редактировать профиль */}
-      <EditProfilePopup
+      <CurrentUserContext.Provider value={currentUser}>
+        <div className="container">
+      
+          <Header/>
+          <Main
+            onEditProfile={handleEditProfileClick}
+            onAddPlace={handleAddPlaceClick}
+            onEditAvatar={handleEditAvatarClick}
+            onCardClick={handleCardClick}
+            cards={cards}
+            onCardLike={handleCardLike}
+            onCardDelete={handleComfirmDeleteClick}          
+          />
+          <Footer/>
+        </div> 
+        {/* Редактировать профиль */}
+        <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
           onUpdateUser={handleUpdateUser}
@@ -177,7 +189,7 @@ function App() {
 
         {/* Превью большой картинки */}
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
-        
+      </CurrentUserContext.Provider>  
     </div>
     
   );

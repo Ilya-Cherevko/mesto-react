@@ -25,7 +25,10 @@ function Popup(props) {
     })
 
     return (
-        <section className={`popup ${isOpen && 'popup_opened'}`} ref={popup}>
+        <section 
+            className={`popup ${isOpen && 'popup_opened'}`}
+            ref={popup}
+        >
             {children}
         </section>
     )
